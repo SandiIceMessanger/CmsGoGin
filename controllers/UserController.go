@@ -11,110 +11,110 @@ import (
 	_ "github.com/heroku/x/hmetrics/onload"
 )
 
-func PostArticle(c *gin.Context) {
+func PostUser(c *gin.Context) {
 	db := config.InitDb()
 	defer db.Close()
 
-	var article models.Articles
-	c.Bind(&article)
+	var user models.Users
+	c.Bind(&user)
 
-	if article.Title != "" && article.Content != "" {
-		// INSERT INTO "articles" (name) VALUES (article.Name);
-		db.Create(&article)
+	if user.Title != "" && user.Content != "" {
+		// INSERT INTO "users" (name) VALUES (user.Name);
+		db.Create(&user)
 		// Display error
 		c.JSON(http.StatusOK, gin.H{
 			"status":  true,
 			"code":    200,
 			"message": "Success",
-			"data":    article,
+			"data":    user,
 		})
 	} else {
 		// Display error
 		c.JSON(422, gin.H{"error": "Fields are empty"})
 	}
 
-	// curl -i -X POST -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Queen\" }" http://localhost:8080/api/v1/articles
+	// curl -i -X POST -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Queen\" }" http://localhost:8080/api/v1/users
 }
 
-func GetArticles(c *gin.Context) {
+func GetUsers(c *gin.Context) {
 	// Connection to the database
 	db := config.InitDb()
 	// Close connection database
 	defer db.Close()
 
-	var articles []models.Articles
-	// SELECT * FROM articles
-	db.Find(&articles)
+	var users []models.Users
+	// SELECT * FROM users
+	db.Find(&users)
 
 	// Display JSON result
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"status":  true,
 		"code":    200,
 		"message": "Success",
-		"data":    articles,
+		"data":    users,
 	})
-	// curl -i http://localhost:8080/api/v1/articles
+	// curl -i http://localhost:8080/api/v1/users
 }
 
-func GetArticle(c *gin.Context) {
+func GetUser(c *gin.Context) {
 	// Connection to the database
 	db := config.InitDb()
 	// Close connection database
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var article models.Articles
-	// SELECT * FROM articles WHERE id = 1;
-	db.First(&article, id)
+	var user models.Users
+	// SELECT * FROM users WHERE id = 1;
+	db.First(&user, id)
 
-	if article.ID != 0 {
+	if user.ID != 0 {
 		// Display JSON result
 		c.JSON(http.StatusOK, map[string]interface{}{
 			"status":  true,
 			"code":    200,
 			"message": "Success",
-			"article": article,
+			"user":    user,
 		})
 	} else {
 		// Display JSON error
-		c.JSON(404, gin.H{"error": "Article not found"})
+		c.JSON(404, gin.H{"error": "User not found"})
 	}
 
-	// curl -i http://localhost:8080/api/v1/articles/1
+	// curl -i http://localhost:8080/api/v1/users/1
 }
 
-func UpdateArticle(c *gin.Context) {
+func UpdateUser(c *gin.Context) {
 	// Connection to the database
 	db := config.InitDb()
 	// Close connection database
 	defer db.Close()
 
-	// Get id article
+	// Get id user
 	id := c.Params.ByName("id")
-	var article models.Articles
-	// SELECT * FROM articles WHERE id = 1;
-	db.First(&article, id)
+	var user models.Users
+	// SELECT * FROM users WHERE id = 1;
+	db.First(&user, id)
 
-	if article.Title != "" && article.Content != "" {
+	if user.Title != "" && user.Content != "" {
 
-		if article.ID != 0 {
-			var newArticle models.Articles
-			c.Bind(&newArticle)
+		if user.ID != 0 {
+			var newUser models.Users
+			c.Bind(&newUser)
 
-			result := models.Articles{
-				Title:    newArticle.Title,
-				Content:  newArticle.Content,
-				Category: newArticle.Category,
-				Status:   newArticle.Status,
+			result := models.Users{
+				Title:    newUser.Title,
+				Content:  newUser.Content,
+				Category: newUser.Category,
+				Status:   newUser.Status,
 			}
 
-			// UPDATE articles SET firstname='newArticle.Firstname', lastname='newArticle.Lastname' WHERE id = article.Id;
+			// UPDATE users SET firstname='newUser.Firstname', lastname='newUser.Lastname' WHERE id = user.Id;
 			db.Save(&result)
 			// Display modified data in JSON message "success"
 			c.JSON(200, gin.H{"success": result})
 		} else {
 			// Display JSON error
-			c.JSON(404, gin.H{"error": "Article not found"})
+			c.JSON(404, gin.H{"error": "User not found"})
 		}
 
 	} else {
@@ -122,30 +122,30 @@ func UpdateArticle(c *gin.Context) {
 		c.JSON(422, gin.H{"error": "Fields are empty"})
 	}
 
-	// curl -i -X PUT -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Merlyn\" }" http://localhost:8080/api/v1/articles/1
+	// curl -i -X PUT -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Merlyn\" }" http://localhost:8080/api/v1/users/1
 }
 
-func DeleteArticle(c *gin.Context) {
+func DeleteUser(c *gin.Context) {
 	// Connection to the database
 	db := config.InitDb()
 	// Close connection database
 	defer db.Close()
 
-	// Get id article
+	// Get id user
 	id := c.Params.ByName("id")
-	var article models.Articles
-	// SELECT * FROM articles WHERE id = 1;
-	db.First(&article, id)
+	var user models.Users
+	// SELECT * FROM users WHERE id = 1;
+	db.First(&user, id)
 
-	if article.ID != 0 {
-		// DELETE FROM articles WHERE id = article.Id
-		db.Delete(&article)
+	if user.ID != 0 {
+		// DELETE FROM users WHERE id = user.Id
+		db.Delete(&user)
 		// Display JSON result
-		c.JSON(200, gin.H{"success": "Article #" + id + " deleted"})
+		c.JSON(200, gin.H{"success": "User #" + id + " deleted"})
 	} else {
 		// Display JSON error
-		c.JSON(404, gin.H{"error": "Article not found"})
+		c.JSON(404, gin.H{"error": "User not found"})
 	}
 
-	// curl -i -X DELETE http://localhost:8080/api/v1/articles/1
+	// curl -i -X DELETE http://localhost:8080/api/v1/users/1
 }

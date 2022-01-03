@@ -11,110 +11,110 @@ import (
 	_ "github.com/heroku/x/hmetrics/onload"
 )
 
-func PostArticle(c *gin.Context) {
+func PostPermissionMaster(c *gin.Context) {
 	db := config.InitDb()
 	defer db.Close()
 
-	var article models.Articles
-	c.Bind(&article)
+	var permissionMaster models.PermissionMasters
+	c.Bind(&permissionMaster)
 
-	if article.Title != "" && article.Content != "" {
-		// INSERT INTO "articles" (name) VALUES (article.Name);
-		db.Create(&article)
+	if permissionMaster.Title != "" && permissionMaster.Content != "" {
+		// INSERT INTO "permissionMasters" (name) VALUES (permissionMaster.Name);
+		db.Create(&permissionMaster)
 		// Display error
 		c.JSON(http.StatusOK, gin.H{
 			"status":  true,
 			"code":    200,
 			"message": "Success",
-			"data":    article,
+			"data":    permissionMaster,
 		})
 	} else {
 		// Display error
 		c.JSON(422, gin.H{"error": "Fields are empty"})
 	}
 
-	// curl -i -X POST -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Queen\" }" http://localhost:8080/api/v1/articles
+	// curl -i -X POST -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Queen\" }" http://localhost:8080/api/v1/permissionMasters
 }
 
-func GetArticles(c *gin.Context) {
+func GetPermissionMasters(c *gin.Context) {
 	// Connection to the database
 	db := config.InitDb()
 	// Close connection database
 	defer db.Close()
 
-	var articles []models.Articles
-	// SELECT * FROM articles
-	db.Find(&articles)
+	var permissionMasters []models.PermissionMasters
+	// SELECT * FROM permissionMasters
+	db.Find(&permissionMasters)
 
 	// Display JSON result
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"status":  true,
 		"code":    200,
 		"message": "Success",
-		"data":    articles,
+		"data":    permissionMasters,
 	})
-	// curl -i http://localhost:8080/api/v1/articles
+	// curl -i http://localhost:8080/api/v1/permissionMasters
 }
 
-func GetArticle(c *gin.Context) {
+func GetPermissionMaster(c *gin.Context) {
 	// Connection to the database
 	db := config.InitDb()
 	// Close connection database
 	defer db.Close()
 
 	id := c.Params.ByName("id")
-	var article models.Articles
-	// SELECT * FROM articles WHERE id = 1;
-	db.First(&article, id)
+	var permissionMaster models.PermissionMasters
+	// SELECT * FROM permissionMasters WHERE id = 1;
+	db.First(&permissionMaster, id)
 
-	if article.ID != 0 {
+	if permissionMaster.ID != 0 {
 		// Display JSON result
 		c.JSON(http.StatusOK, map[string]interface{}{
-			"status":  true,
-			"code":    200,
-			"message": "Success",
-			"article": article,
+			"status":           true,
+			"code":             200,
+			"message":          "Success",
+			"permissionMaster": permissionMaster,
 		})
 	} else {
 		// Display JSON error
-		c.JSON(404, gin.H{"error": "Article not found"})
+		c.JSON(404, gin.H{"error": "PermissionMaster not found"})
 	}
 
-	// curl -i http://localhost:8080/api/v1/articles/1
+	// curl -i http://localhost:8080/api/v1/permissionMasters/1
 }
 
-func UpdateArticle(c *gin.Context) {
+func UpdatePermissionMaster(c *gin.Context) {
 	// Connection to the database
 	db := config.InitDb()
 	// Close connection database
 	defer db.Close()
 
-	// Get id article
+	// Get id permissionMaster
 	id := c.Params.ByName("id")
-	var article models.Articles
-	// SELECT * FROM articles WHERE id = 1;
-	db.First(&article, id)
+	var permissionMaster models.PermissionMasters
+	// SELECT * FROM permissionMasters WHERE id = 1;
+	db.First(&permissionMaster, id)
 
-	if article.Title != "" && article.Content != "" {
+	if permissionMaster.Title != "" && permissionMaster.Content != "" {
 
-		if article.ID != 0 {
-			var newArticle models.Articles
-			c.Bind(&newArticle)
+		if permissionMaster.ID != 0 {
+			var newPermissionMaster models.PermissionMasters
+			c.Bind(&newPermissionMaster)
 
-			result := models.Articles{
-				Title:    newArticle.Title,
-				Content:  newArticle.Content,
-				Category: newArticle.Category,
-				Status:   newArticle.Status,
+			result := models.PermissionMasters{
+				Title:    newPermissionMaster.Title,
+				Content:  newPermissionMaster.Content,
+				Category: newPermissionMaster.Category,
+				Status:   newPermissionMaster.Status,
 			}
 
-			// UPDATE articles SET firstname='newArticle.Firstname', lastname='newArticle.Lastname' WHERE id = article.Id;
+			// UPDATE permissionMasters SET firstname='newPermissionMaster.Firstname', lastname='newPermissionMaster.Lastname' WHERE id = permissionMaster.Id;
 			db.Save(&result)
 			// Display modified data in JSON message "success"
 			c.JSON(200, gin.H{"success": result})
 		} else {
 			// Display JSON error
-			c.JSON(404, gin.H{"error": "Article not found"})
+			c.JSON(404, gin.H{"error": "PermissionMaster not found"})
 		}
 
 	} else {
@@ -122,30 +122,30 @@ func UpdateArticle(c *gin.Context) {
 		c.JSON(422, gin.H{"error": "Fields are empty"})
 	}
 
-	// curl -i -X PUT -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Merlyn\" }" http://localhost:8080/api/v1/articles/1
+	// curl -i -X PUT -H "Content-Type: application/json" -d "{ \"firstname\": \"Thea\", \"lastname\": \"Merlyn\" }" http://localhost:8080/api/v1/permissionMasters/1
 }
 
-func DeleteArticle(c *gin.Context) {
+func DeletePermissionMaster(c *gin.Context) {
 	// Connection to the database
 	db := config.InitDb()
 	// Close connection database
 	defer db.Close()
 
-	// Get id article
+	// Get id permissionMaster
 	id := c.Params.ByName("id")
-	var article models.Articles
-	// SELECT * FROM articles WHERE id = 1;
-	db.First(&article, id)
+	var permissionMaster models.PermissionMasters
+	// SELECT * FROM permissionMasters WHERE id = 1;
+	db.First(&permissionMaster, id)
 
-	if article.ID != 0 {
-		// DELETE FROM articles WHERE id = article.Id
-		db.Delete(&article)
+	if permissionMaster.ID != 0 {
+		// DELETE FROM permissionMasters WHERE id = permissionMaster.Id
+		db.Delete(&permissionMaster)
 		// Display JSON result
-		c.JSON(200, gin.H{"success": "Article #" + id + " deleted"})
+		c.JSON(200, gin.H{"success": "PermissionMaster #" + id + " deleted"})
 	} else {
 		// Display JSON error
-		c.JSON(404, gin.H{"error": "Article not found"})
+		c.JSON(404, gin.H{"error": "PermissionMaster not found"})
 	}
 
-	// curl -i -X DELETE http://localhost:8080/api/v1/articles/1
+	// curl -i -X DELETE http://localhost:8080/api/v1/permissionMasters/1
 }
