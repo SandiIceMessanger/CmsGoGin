@@ -11,6 +11,6 @@ type PermissionMaster struct {
 	// User       User   `gorm:"foreignKey:IdUser" json:"user" form:"user"`
 }
 
-func (Articles) TableName() string {
+func (PermissionMaster) TableName() string {
 	return "tbl_permission_master"
 }

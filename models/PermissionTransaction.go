@@ -11,6 +11,6 @@ type PermissionTransaction struct {
 	// PermissionMaster   PermissionMaster `gorm:"foreignKey:IdPermissionMaster" json:"permission_master" form:"permission_master"`
 }
 
-func (Articles) TableName() string {
+func (PermissionTransaction) TableName() string {
 	return "tbl_permission_transaction"
 }

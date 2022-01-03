@@ -49,12 +49,6 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 		v1.PUT("/permission_transactions/:id", controllers.UpdatePermissionTransaction)
 		v1.DELETE("/permission_transactions/:id", controllers.DeletePermissionTransaction)
 
-		v1.POST("/posts", controllers.PostPost)
-		v1.GET("/posts", controllers.GetPosts)
-		v1.GET("/posts/:id", controllers.GetPost)
-		v1.PUT("/posts/:id", controllers.UpdatePost)
-		v1.DELETE("/posts/:id", controllers.DeletePost)
-
 		v1.POST("/users", controllers.PostUser)
 		v1.GET("/users", controllers.GetUsers)
 		v1.GET("/users/:id", controllers.GetUser)

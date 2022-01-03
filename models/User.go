@@ -15,6 +15,6 @@ type User struct {
 	CreatedBy string `json:"created_by" form:"created_by"`
 }
 
-func (Articles) TableName() string {
+func (User) TableName() string {
 	return "tbl_user"
 }

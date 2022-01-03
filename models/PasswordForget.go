@@ -12,6 +12,6 @@ type PasswordForget struct {
 	// User   User   `gorm:"foreignKey:IdUser" json:"user" form:"user"`
 }
 
-func (Articles) TableName() string {
+func (PasswordForget) TableName() string {
 	return "tbl_password_forget"
 }
